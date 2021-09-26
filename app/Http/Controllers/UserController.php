@@ -15,11 +15,10 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function index()
+    public function index() 
     {
-        $user = auth()->user(); //get the authenticated user
-        $users = User::all(); //get all users
+        $user = auth()->user();
+        $users = User::all();
         return view('auth.user', ['user' => $user, 'users' => $users]);
     }
-
 }

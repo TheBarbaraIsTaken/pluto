@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TodoController;
+use App\Http\Controllers\BankController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,5 +21,10 @@ Route::get('/setlocale/{locale}', [UserController::class, 'setLocale'])->name('s
 /* Routes that needs authentication. Guests will be redirected to the login screen. */
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () { return view('home'); })->name('home');
+    Route::get('/home', function () { return view('home'); })->name('home');
+    
     Route::get('/user', [UserController::class, 'index'])->name('user');
+    Route::get('/account', [BankController::class, 'index'])->name('account');
+    Route::get('/todos', [TodoController::class, 'index'])->name('todos');
+    
 });
