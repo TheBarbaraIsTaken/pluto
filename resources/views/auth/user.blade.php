@@ -3,6 +3,7 @@
 @section('title')
 
 Felhasználói beállítások
+{{ auth()->user() }}
 
 @endsection
 
@@ -16,10 +17,12 @@ Felhasználói beállítások
           <th>Email</th>
       </tr>
     </thead>
-
+    
+    
     <tbody>
         @foreach ($users as $user2)
         @if($user2 == $user)
+        
         <tr>
             <td><b>{{ $user2->name }}</b></td>
             <td><b>{{ $user2->email }}</b></td>
@@ -34,6 +37,5 @@ Felhasználói beállítások
     </tbody>
   </table>
 
-  
-
 @endsection
+
