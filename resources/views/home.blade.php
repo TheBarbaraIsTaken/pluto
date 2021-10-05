@@ -75,6 +75,7 @@
           <p>I'm the last card. I don't have a name.</p>
         </div>
       </div>
+      </div>
 <p>Welcome.</p>
 <div class="card">
     <div class="card-content">
