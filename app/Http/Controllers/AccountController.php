@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class AccountController extends Controller
 {
@@ -15,6 +17,13 @@ class AccountController extends Controller
     public function index()
     {
         //
+        $accounts = DB::table('accounts')
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+        
+        return view('accounts.index', [
+            'accounts' => $accounts
+        ]);
     }
 
     /**
@@ -25,6 +34,7 @@ class AccountController extends Controller
     public function create()
     {
         //
+        return view('accounts.create');
     }
 
     /**
@@ -35,7 +45,36 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //$todo = Todo::create($request->all());
+        /*
+        Validator::make($request->all(), [
+            'name' => 'required|alpha|max:255',
+            'description' => 'nullable',
+        ])->validate();
+        */
+        $income = false;
+        if ($request->income) {
+            $income = true;
+        }
+
+        $cash = false;
+        if ($request->cash) {
+            $cash = true;
+        }
+        
+        
+        $account = Account::create([
+            'amount' => $request->amount,
+            'notes' => $request->notes,
+            'income' => $income,
+            'cash' => $cash,
+             
+            //'completed' => false, //default false in sql
+            'user_id' => $request->user()->id, //or auth()->user()->id
+        ]);
+        $account->assigned_users()->attach($request->user()->id);
+        return back()->with('message', __('Succesfully created'));
+                                    //a toast message will appear, see layouts.app.blade
     }
 
     /**

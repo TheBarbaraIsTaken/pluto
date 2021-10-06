@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Account;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AccountFactory extends Factory
@@ -22,7 +23,11 @@ class AccountFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'amount' => $this->faker->numberBetween(1000,10000),
+            'notes' => $this->faker->paragraph(),
+            'income' => $this->faker->boolean(),
+            'cash' => $this->faker->boolean(),
+            'user_id' => User::all()->random()->id,
         ];
     }
 }
