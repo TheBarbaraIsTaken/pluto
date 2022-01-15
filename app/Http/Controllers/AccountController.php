@@ -17,12 +17,18 @@ class AccountController extends Controller
     public function index()
     {
         //
+        $id = auth()->user()->id;
+        $income_sum = DB::table('accounts')->where('user_id', '=', $id)->where('income', true)->sum('amount'); //int
+        $expense_sum = DB::table('accounts')->where('user_id', '=', $id)->where('income', false)->sum('amount'); //int
         $accounts = DB::table('accounts')
+                        ->where('user_id', '=', $id)
                         ->orderBy('created_at', 'desc')
                         ->get();
         
         return view('accounts.index', [
-            'accounts' => $accounts
+            'accounts' => $accounts,
+            'income_sum' => $income_sum,
+            'expense_sum' => $expense_sum
         ]);
     }
 
@@ -45,13 +51,6 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        //$todo = Todo::create($request->all());
-        /*
-        Validator::make($request->all(), [
-            'name' => 'required|alpha|max:255',
-            'description' => 'nullable',
-        ])->validate();
-        */
         $income = false;
         if ($request->income) {
             $income = true;
@@ -68,9 +67,7 @@ class AccountController extends Controller
             'notes' => $request->notes,
             'income' => $income,
             'cash' => $cash,
-             
-            //'completed' => false, //default false in sql
-            'user_id' => $request->user()->id, //or auth()->user()->id
+            'user_id' => $request->user()->id,
         ]);
         $account->assigned_users()->attach($request->user()->id);
         return back()->with('message', __('Succesfully created'));
@@ -96,7 +93,9 @@ class AccountController extends Controller
      */
     public function edit(Account $account)
     {
-        //
+        return view('accounts.edit', [
+            'account' => $account,
+        ]);
     }
 
     /**
@@ -108,7 +107,24 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        //
+        $income = false;
+        if ($request->income) {
+            $income = true;
+        }
+
+        $cash = false;
+        if ($request->cash) {
+            $cash = true;
+        }
+
+        $account->update([
+            'amount' => $request->amount,
+            'notes' => $request->notes,
+            'income' => $income,
+            'cash' => $cash,
+    ]);
+
+        return back()->with('message', __('Succesfully updated'));
     }
 
     /**
@@ -119,6 +135,8 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        //
+        DB::table('account_user')->where('account_id', '=', $account->id)->delete();
+        DB::table('accounts')->where('id', '=', $account->id)->delete();
+        return back()->with('message', __('Deleted'));
     }
 }

@@ -15,9 +15,19 @@ Felhasználói email:
       <div class="card-panel teal">
       
         <a href="{{ route('accounts.create') }}" class="btn-floating btn-large waves-effect waves-light green accent-3 right"><i class="material-icons">add</i></a>
-        <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-        I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+        <span class="white-text">
+        <p>
+          Total account: {{ $income_sum - $expense_sum }}
+        </p>
+        <p>
+          Total income: {{ $income_sum }}
+        </p>
+        <p>
+          Total expense: {{ $expense_sum }}
+        </p>
+
         </span>
+        
       
       </div>
     </div>
@@ -68,8 +78,8 @@ Felhasználói email:
     <div class="col s2">
       <div class="valign-wrapper">
           <p>
-            <a class="btn-floating btn-medium waves-effect waves-light blue lighten-4" style="margin-right: 2pt"><i class="material-icons">edit</i></a>
-            <a class="btn-floating btn-medium waves-effect waves-light red lighten-2"><i class="material-icons">delete</i></a>
+            <a href="{{ route('accounts.edit', $account->id) }}" class="btn-floating btn-medium waves-effect waves-light blue lighten-4" style="margin-right: 2pt"><i class="material-icons">edit</i></a>
+            <a href="{{ route('accounts.destroy', $account->id) }}" class="btn-floating btn-medium waves-effect waves-light red lighten-2"><i class="material-icons">delete</i></a>
           </p>
     </div>
   </div>
